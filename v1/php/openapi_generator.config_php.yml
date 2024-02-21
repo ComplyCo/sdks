@@ -1,0 +1,10 @@
+gitUserId: "ComplyCo"
+gitRepoId: "sdks"
+composerVendorName: "complyco"
+composerProjectName: "sdk"
+packageName: "ComplyCoSDK"
+packageVersion: "1.0.0"
+invokerPackage: "ComplyCo"
+apiPackage: "Api"
+modelPackage: "Model"
+

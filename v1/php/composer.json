@@ -1,0 +1,40 @@
+{
+    "name": "complyco/sdk",
+    "description": "A REST API for working with ComplyCo data.",
+    "keywords": [
+        "openapitools",
+        "openapi-generator",
+        "openapi",
+        "php",
+        "sdk",
+        "rest",
+        "api"
+    ],
+    "version": "1.0.0",
+    "homepage": "https://www.complyco.com/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ComplyCo",
+            "homepage": "https://www.complyco.com/"
+        }
+    ],
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "guzzlehttp/guzzle": "^7.3",
+        "guzzlehttp/psr7": "^1.7 || ^2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0 || ^9.0",
+        "friendsofphp/php-cs-fixer": "^3.5"
+    },
+    "autoload": {
+        "psr-4": { "ComplyCo\\" : "lib/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "ComplyCo\\Test\\" : "test/" }
+    }
+}
