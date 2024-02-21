@@ -1,0 +1,277 @@
+basePath: /v1
+definitions:
+  canceltask.ResponseBody:
+    properties:
+      message:
+        type: string
+    type: object
+  extendtaskexpiry.ResponseBody:
+    properties:
+      message:
+        type: string
+    type: object
+  gettask.FailureResponseBody:
+    properties:
+      message:
+        type: string
+    type: object
+  gettask.ResponseBody:
+    properties:
+      cancelled_at:
+        type: string
+      completed_at:
+        type: string
+      document_name:
+        type: string
+      expires_at:
+        type: string
+      file_url:
+        type: string
+      identity_email:
+        type: string
+      identity_id:
+        type: string
+      message:
+        type: string
+      scroll_required:
+        type: boolean
+      signature_required:
+        type: boolean
+    type: object
+  gettasks.FailureResponseBody:
+    properties:
+      message:
+        type: string
+    type: object
+  gettasks.ResponseBody:
+    properties:
+      message:
+        type: string
+      tasks:
+        items:
+          $ref: '#/definitions/gettasks.TaskDetails'
+        type: array
+    type: object
+  gettasks.TaskDetails:
+    properties:
+      cancelled_at:
+        type: string
+      completed_at:
+        type: string
+      document_name:
+        type: string
+      expires_at:
+        type: string
+      id:
+        type: string
+      identity_email:
+        type: string
+      identity_id:
+        type: string
+      scroll_required:
+        type: boolean
+      signature_required:
+        type: boolean
+    type: object
+  postdocumentconsenttask.ResponseBody:
+    properties:
+      message:
+        type: string
+    type: object
+host: api.complyco.com
+info:
+  contact:
+    email: support@complyco.com
+    name: ComplyCo Support
+  description: A REST API for working with ComplyCo data.
+  title: ComplyCo SDK
+  version: 1.0.0
+paths:
+  /tasks:
+    get:
+      description: Retrieves all tasks associated with a workspace.
+      operationId: get-tasks
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gettasks.ResponseBody'
+        "404":
+          description: Tasks not found
+          schema:
+            $ref: '#/definitions/gettasks.FailureResponseBody'
+        "500":
+          description: Failed to find tasks", "Internal server error
+          schema:
+            $ref: '#/definitions/gettasks.FailureResponseBody'
+      summary: Get all tasks.
+      tags:
+      - Task
+  /tasks/{task_id}:
+    get:
+      description: Retrieves details for the task identified by the given task ID.
+      operationId: get-task
+      parameters:
+      - description: Task ID
+        format: uuid
+        in: path
+        name: task_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gettask.ResponseBody'
+        "400":
+          description: Invalid task ID
+          schema:
+            $ref: '#/definitions/gettask.FailureResponseBody'
+        "404":
+          description: Task not found
+          schema:
+            $ref: '#/definitions/gettask.FailureResponseBody'
+        "500":
+          description: Failed to find task", "Failed to retrieve file", "Internal
+            server error
+          schema:
+            $ref: '#/definitions/gettask.FailureResponseBody'
+      summary: Get task.
+      tags:
+      - Task
+  /tasks/{task_id}/cancel:
+    patch:
+      description: Cancel a specific task by ID if it is not already completed, cancelled,
+        or expired.
+      operationId: cancel-task
+      parameters:
+      - description: Task ID
+        format: uuid
+        in: path
+        name: task_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Task successfully cancelled
+          schema:
+            $ref: '#/definitions/canceltask.ResponseBody'
+        "400":
+          description: Invalid task ID", "Task already cancelled", "Task already completed",
+            "Task already expired
+          schema:
+            $ref: '#/definitions/canceltask.ResponseBody'
+        "404":
+          description: Task not found
+          schema:
+            $ref: '#/definitions/canceltask.ResponseBody'
+        "500":
+          description: Failed to find task", "Failed to cancel task", "Internal server
+            error
+          schema:
+            $ref: '#/definitions/canceltask.ResponseBody'
+      summary: Cancel task.
+      tags:
+      - Task
+  /tasks/{task_id}/extend_expiry:
+    patch:
+      description: Extend expiry date of specified task by a given number of days,
+        if not already cancelled or completed.
+      operationId: extend-task-expiry
+      parameters:
+      - description: The ID of the task to extend
+        format: uuid
+        in: path
+        name: task_id
+        required: true
+        type: string
+      - description: Number of days to extend the expiry by
+        in: query
+        name: days
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Task expiry successfully extended
+          schema:
+            $ref: '#/definitions/extendtaskexpiry.ResponseBody'
+        "400":
+          description: Invalid task ID", "Invalid 'days' parameter. Please specify
+            a positive integer.", "Task already cancelled", "Task already completed
+          schema:
+            $ref: '#/definitions/extendtaskexpiry.ResponseBody'
+        "404":
+          description: Task not found
+          schema:
+            $ref: '#/definitions/extendtaskexpiry.ResponseBody'
+        "500":
+          description: Failed to find task", "Failed to extend task expiry", "Internal
+            server error
+          schema:
+            $ref: '#/definitions/extendtaskexpiry.ResponseBody'
+      summary: Extend task expiry date.
+      tags:
+      - Task
+  /tasks/document_consent:
+    post:
+      description: Creates a new document consent task with the provided details and
+        file. This endpoint accepts multipart/form-data content type for file uploads
+        along with other task details.
+      operationId: post-task
+      parameters:
+      - description: Document File
+        in: formData
+        name: file
+        type: file
+      - description: Identity ID (external identifier)
+        in: formData
+        name: identity_id
+        required: true
+        type: string
+      - description: Identity Email
+        in: formData
+        name: identity_email
+        required: true
+        type: string
+      - description: Document Name
+        in: formData
+        name: document_name
+        required: true
+        type: string
+      - description: Scroll Required
+        in: formData
+        name: scroll_required
+        type: boolean
+      - description: Signature Required
+        in: formData
+        name: signature_required
+        type: boolean
+      - description: Expiry Date
+        format: date-time
+        in: formData
+        name: expires_at
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/postdocumentconsenttask.ResponseBody'
+        "400":
+          description: Bad data", "File too large", "Invalid content type
+          schema:
+            $ref: '#/definitions/postdocumentconsenttask.ResponseBody'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/postdocumentconsenttask.ResponseBody'
+      summary: Create document consent task.
+      tags:
+      - Task
+schemes:
+- https
+security:
+- BasicAuth: []
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"
