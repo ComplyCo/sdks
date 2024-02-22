@@ -1,0 +1,17 @@
+.gitignore
+.openapi-generator-ignore
+api.ts
+api/apis.ts
+api/taskApi.ts
+git_push.sh
+model/canceltaskResponseBody.ts
+model/extendtaskexpiryResponseBody.ts
+model/gettaskFailureResponseBody.ts
+model/gettaskResponseBody.ts
+model/gettasksFailureResponseBody.ts
+model/gettasksResponseBody.ts
+model/gettasksTaskDetails.ts
+model/models.ts
+model/postdocumentconsenttaskResponseBody.ts
+package.json
+tsconfig.json
