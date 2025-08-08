@@ -23,9 +23,9 @@ from setuptools import setup, find_packages  # noqa: H301
 # http://pypi.python.org/pypi/setuptools
 NAME = "complyco-sdk"
 VERSION = "1.0.0"
-PYTHON_REQUIRES = ">=3.7"
+PYTHON_REQUIRES = ">=3.9"
 REQUIRES = [
-    "urllib3 >= 1.25.3, < 2.1.0",
+    "urllib3 >= 2.5.0",
     "python-dateutil",
     "pydantic >= 2",
     "typing-extensions >= 4.7.1",
